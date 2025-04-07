@@ -1,5 +1,7 @@
 FROM node:20-alpine
 
+RUN npm install -g @vue/cli@5
+
 WORKDIR /app
 
 COPY package.json package-lock.json ./

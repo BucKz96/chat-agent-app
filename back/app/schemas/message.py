@@ -16,14 +16,3 @@ class Message(BaseModel):
 
 class ChatRequest(BaseModel):
     history: list[Message]
-
-
-class MessageCreate(Message):
-    pass
-
-
-class MessageResponse(Message):
-    timestamp: datetime
-
-    class Config:
-        orm_mode = True

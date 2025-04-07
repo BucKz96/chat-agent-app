@@ -8,3 +8,14 @@ services:
       - ./back:/app
     environment:
       - PYTHONUNBUFFERED=1
+
+  frontend:
+    build:
+      context: ./front/chat-ui-vue3
+    container_name: chat-front
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./front/chat-ui-vue3:/app
+    stdin_open: true
+    tty: true

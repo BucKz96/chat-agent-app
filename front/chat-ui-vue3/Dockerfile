@@ -16,4 +16,4 @@ ENV ESLINT_CACHE_LOCATION=/tmp/.eslint-cache
 
 EXPOSE 8080
 
-CMD ["vue-cli-service", "serve", "--host", "0.0.0.0", "--port", "8080"]
+CMD ["sh", "-c", "vue-cli-service serve --host 0.0.0.0 --port 8080"]

@@ -1,12 +1,10 @@
 FROM node:20-slim
 
-RUN npm install -g @vue/cli@5
-
 WORKDIR /app
 
 COPY package.json package-lock.json ./
 
-RUN npm install
+RUN NODE_ENV=development npm install
 
 COPY . .
 
@@ -16,4 +14,4 @@ ENV ESLINT_CACHE_LOCATION=/tmp/.eslint-cache
 
 EXPOSE 8080
 
-CMD ["sh", "-c", "vue-cli-service serve --host 0.0.0.0 --port 8080"]
+CMD ["npx", "vue-cli-service", "serve", "--host", "0.0.0.0", "--port", "8080"]

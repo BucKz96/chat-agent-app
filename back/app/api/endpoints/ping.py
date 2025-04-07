@@ -3,6 +3,7 @@ from datetime import datetime
 
 router = APIRouter()
 
+
 @router.get("/ping")
 async def ping():
     return {
@@ -10,7 +11,5 @@ async def ping():
         "message": "pong",
         "timestamp": datetime.now().isoformat(),
         "service": "chat-agent-backend",
-        "version": "1.0.0"
+        "version": "1.0.0",
     }
-
-

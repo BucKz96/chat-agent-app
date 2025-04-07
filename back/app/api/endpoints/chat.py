@@ -20,4 +20,4 @@ async def chat(chat_request: ChatRequest):
     if not is_valid_chat_history(chat_request.history):
         raise HTTPException(status_code=400, detail="Invalid chat history")
 
-    return generate_agent_reply(chat_request.history)
+    return generate_agent_reply()

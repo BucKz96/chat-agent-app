@@ -1,12 +1,13 @@
 from fastapi import APIRouter, HTTPException
-from app.schemas.message import MessageCreate, MessageResponse
-from app.services.chat_service import generate_agent_response
+from app.schemas.message import ChatRequest, Message
+from app.services.chat_service import is_valid_chat_history, generate_agent_reply
 
 router = APIRouter()
 
 
-@router.post("/chat/", response_model=MessageResponse)
-async def chat_endpoint(user_message: MessageCreate):
-    if not user_message.content:
-        raise HTTPException(status_code=400, detail="Le message ne peut pas être vide.")
-    return generate_agent_response(user_message)
+@router.post("/chat/", response_model=Message)
+async def chat(chat_request: ChatRequest):
+    if not is_valid_chat_history(chat_request.history):
+        raise HTTPException(status_code=400, detail="Invalid chat history")
+
+    return generate_agent_reply(chat_request.history)

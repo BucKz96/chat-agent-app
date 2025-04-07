@@ -1,18 +1,18 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, validator
 from datetime import datetime
+from typing import Literal
 
 
-class MessageBase(BaseModel):
-    sender: str
+class Message(BaseModel):
+    sender: Literal["user", "agent"]
     content: str
 
+    @validator("content")
+    def not_empty(cls, v):
+        if not v.strip():
+            raise ValueError("content must not be empty")
+        return v
 
-class MessageCreate(MessageBase):
-    pass
 
-
-class MessageResponse(MessageBase):
-    timestamp: datetime
-
-    class Config:
-        orm_mode = True
+class ChatRequest(BaseModel):
+    history: list[Message]

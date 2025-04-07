@@ -8,7 +8,7 @@ from datetime import datetime
 router = APIRouter()
 
 
-@router.get("/ping")
+@router.get("/")
 async def ping():
     return {
         "status": "OK",

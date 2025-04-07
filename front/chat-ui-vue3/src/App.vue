@@ -36,7 +36,8 @@ export default {
         },
       ],
       titleImageUrl: '',
-      messageList: [],
+      messageList: [],      // affichage dans le chat
+      validMessages: [],    // uniquement ce qu'on envoie au backend
       newMessagesCount: 0,
       isChatOpen: true,
       showTypingIndicator: '',
@@ -69,16 +70,31 @@ export default {
   },
   methods: {
     async onMessageWasSent(message) {
-        this.messageList.push({
-            type: 'text',
-              author: 'me',
-              data: { text: message.data?.text || '' }
-        })
+      const text = message.data?.text?.trim()
 
-      const history = this.messageList.map(m => ({
-        sender: m.author === 'me' ? 'user' : 'agent',
-        content: m.data.text
-      }))
+      if (!text || text.length < 3 || !/[a-zA-ZÀ-ÿ]/.test(text)) {
+        this.messageList.push({
+          type: 'text',
+          author: 'agent',
+          data: { text: "Ton message est trop court ou incompréhensible" }
+        })
+        return
+      }
+
+      // Ajout visuel côté UI
+      this.messageList.push({
+        type: 'text',
+        author: 'me',
+        data: { text }
+      })
+
+      // Ajout logique pour l'historique backend
+      this.validMessages.push({
+        sender: 'user',
+        content: text
+      })
+
+      const history = [...this.validMessages]
 
       try {
         const res = await fetch('http://localhost:8000/chat/', {
@@ -96,6 +112,11 @@ export default {
             author: data.sender,
             data: { text: data.content }
           })
+
+          this.validMessages.push({
+            sender: 'agent',
+            content: data.content
+          })
         } else {
           this.messageList.push({
             type: 'text',
@@ -107,7 +128,7 @@ export default {
         this.messageList.push({
           type: 'text',
           author: 'agent',
-          data: { text: 'Erreur serveur ❌' }
+          data: { text: 'Erreur serveur' }
         })
       }
     },
@@ -121,3 +142,9 @@ export default {
 }
 </script>
 
+<style>
+body, html, #app {
+  height: 100%;
+  margin: 0;
+}
+</style>

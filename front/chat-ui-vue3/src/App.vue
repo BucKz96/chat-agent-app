@@ -69,10 +69,14 @@ export default {
   },
   methods: {
     async onMessageWasSent(message) {
-      this.messageList.push(message)
+        this.messageList.push({
+            type: 'text',
+              author: 'me',
+              data: { text: message.data?.text || '' }
+        })
 
       const history = this.messageList.map(m => ({
-        sender: m.author,
+        sender: m.author === 'me' ? 'user' : 'agent',
         content: m.data.text
       }))
 
@@ -84,12 +88,21 @@ export default {
         })
 
         const data = await res.json()
+        console.log("Réponse backend:", data)
 
-        this.messageList.push({
-          type: 'text',
-          author: 'agent',
-          data: { text: data.content }
-        })
+        if (data && data.content && data.sender) {
+          this.messageList.push({
+            type: 'text',
+            author: data.sender,
+            data: { text: data.content }
+          })
+        } else {
+          this.messageList.push({
+            type: 'text',
+            author: 'agent',
+            data: { text: 'Erreur inconnue' }
+          })
+        }
       } catch (err) {
         this.messageList.push({
           type: 'text',

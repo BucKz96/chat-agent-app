@@ -1,8 +1,16 @@
+"""
+Pydantic models for message structure and chat request validation.
+"""
+
 from pydantic import BaseModel, validator
 from typing import Literal
 
 
 class Message(BaseModel):
+    """
+    Represents a message from either 'user' or 'agent'.
+    """
+
     sender: Literal["user", "agent"]
     content: str
 
@@ -14,4 +22,8 @@ class Message(BaseModel):
 
 
 class ChatRequest(BaseModel):
+    """
+    Payload containing the full chat history to validate and process.
+    """
+
     history: list[Message]

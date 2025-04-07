@@ -1,3 +1,7 @@
+"""
+Unit tests for the /chat/ endpoint using FastAPI's TestClient.
+"""
+
 from fastapi.testclient import TestClient
 from app.main import app
 
@@ -5,13 +9,17 @@ client = TestClient(app)
 
 
 def test_valid_chat_history():
+    """
+    Test that a valid alternating user/agent message history
+    returns an agent response.
+    """
     response = client.post(
         "/chat/",
         json={
             "history": [
-                {"sender": "user", "content": "Bonjour"},
-                {"sender": "agent", "content": "Salut"},
-                {"sender": "user", "content": "comment tu vas ?"},
+                {"sender": "user", "content": "Hey"},
+                {"sender": "agent", "content": "Hello"},
+                {"sender": "user", "content": "What's up ?"},
             ]
         },
     )
@@ -23,6 +31,10 @@ def test_valid_chat_history():
 
 
 def test_invalid_double_user_history():
+    """
+    Test that an invalid sequence
+    (e.g., two user messages in a row) returns 400.
+    """
     response = client.post(
         "/chat/",
         json={

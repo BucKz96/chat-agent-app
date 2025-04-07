@@ -72,7 +72,7 @@ export default {
     async onMessageWasSent(message) {
       const text = message.data?.text?.trim()
 
-      if (!text || text.length < 1 || !/[a-zA-ZÀ-ÿ]/.test(text)) {
+      if (!text || text.length < 2 || !/[a-zA-ZÀ-ÿ]/.test(text)) {
         this.messageList.push({
           type: 'text',
           author: 'agent',

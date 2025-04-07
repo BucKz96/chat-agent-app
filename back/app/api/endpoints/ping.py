@@ -1,3 +1,7 @@
+"""
+Ping endpoint - used to test if the API is live and responsive.
+"""
+
 from fastapi import APIRouter
 from datetime import datetime
 

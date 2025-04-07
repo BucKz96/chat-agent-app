@@ -1,11 +1,18 @@
+"""
+Main application entrypoint for the FastAPI backend.
+Initializes routes and API structure.
+"""
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.api.endpoints import chat, ping
+from api.endpoints import chat, ping
 
+# Initialize FastAPI application
 app = FastAPI()
 
-app.include_router(chat.router)
-app.include_router(ping.router)
+# Include router for each endpoints
+app.include_router(chat.router, prefix="/chat", tags=["chat"])
+app.include_router(ping.router, prefix="/ping", tags=["ping"])
 
 app.add_middleware(
     CORSMiddleware,

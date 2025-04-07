@@ -1,4 +1,4 @@
-from app.schemas.message import Message, ChatRequest
+from app.schemas.message import Message
 
 
 def is_valid_chat_history(history: list[Message]) -> bool:

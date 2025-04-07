@@ -5,7 +5,7 @@ Initializes routes and API structure.
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from api.endpoints import chat, ping
+from app.api.endpoints import chat, ping
 
 # Initialize FastAPI application
 app = FastAPI()

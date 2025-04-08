@@ -2,7 +2,7 @@
 Pydantic models for message structure and chat request validation.
 """
 
-from pydantic import BaseModel, validator
+from pydantic import BaseModel, Field, field_validator
 from typing import Literal
 
 
@@ -12,10 +12,12 @@ class Message(BaseModel):
     """
 
     sender: Literal["user", "agent"]
-    content: str
+    content: str = Field(...)
 
-    @validator("content")
-    def not_empty(cls, v):
+
+    @classmethod
+    @field_validator("content")
+    def not_empty(cls, v: str) -> str:
         if not v.strip():
             raise ValueError("content must not be empty")
         return v

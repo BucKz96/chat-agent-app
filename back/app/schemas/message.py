@@ -12,11 +12,11 @@ class Message(BaseModel):
     """
 
     sender: Literal["user", "agent"]
-    content: str = Field(..., min_length=1)
+    content: str = Field(..., min_length=1, description="Content must not be empty")
 
 
     @classmethod
-    @field_validator("content")
+    @field_validator("content", mode='after')
     def not_empty(cls, v: str) -> str:
         if not v.strip():
             raise ValueError("content must not be empty")

@@ -36,6 +36,11 @@ docker-compose up --build
 
 ## 🧪 Tester l'API
 
+```
+docker exec -it chat-back pytest    
+```
+
+---
 ```json
 POST /chat/
 {
@@ -53,6 +58,7 @@ POST /chat/
   "content": "Ceci est une réponse automatique."
 }
 ```
+
 
 ---
 
@@ -76,7 +82,6 @@ chat-agent-app/
 │   │   │   └── endpoints/
 │   │   │       ├── chat.py
 │   │   │       └── ping.py
-│   │   ├── models/
 │   │   ├── schemas/
 │   │   │   └── message.py
 │   │   ├── services/
@@ -119,13 +124,10 @@ chat-agent-app/
 
 ## ✨ Auteur
 
-- Réalisé par **@BucKz96** pour un test d’alternance Python & Vue 3  
-- Clean code, clean commit, clean doc. Let's go 💼
+- Réalisé par **@BucKz96** pour un test Python  
 
 ---
 
 ## 💬 Bonus
 
-> Ce projet a été conçu pour fonctionner **immédiatement après un `git clone`**, sans aucune config manuelle.  
-> Un vrai test de production, prêt à l’emploi. 🧠💡
-
+> Ce projet a été conçu pour fonctionner **immédiatement après un `git clone`**, sans aucune config manuelle.

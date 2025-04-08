@@ -16,7 +16,7 @@ class Message(BaseModel):
 
 
     @classmethod
-    @field_validator("content")
+    @field_validator("content", mode='before')
     def not_empty(cls, v: str) -> str:
         if not v.strip():
             raise ValueError("content must not be empty")

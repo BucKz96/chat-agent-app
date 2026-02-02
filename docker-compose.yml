@@ -5,9 +5,13 @@ services:
     ports:
       - "8000:8000"
     volumes:
-      - ./back:/app
+      # Mount only Python source files, not the entire directory with dependencies
+      - ./back/app:/app/app:ro
+      - ./back/tests:/app/tests:ro
     environment:
       - PYTHONUNBUFFERED=1
+      - LOG_LEVEL=INFO
+    restart: unless-stopped
   frontend:
     build:
       context: ./front/chat-ui-vue3

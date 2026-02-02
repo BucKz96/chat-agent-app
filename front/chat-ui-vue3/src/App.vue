@@ -23,6 +23,7 @@ export default {
   name: 'App',
   data() {
     return {
+      apiBaseUrl: process.env.VUE_APP_API_URL || 'http://localhost:8000',
       participants: [
         {
           id: 'user',
@@ -96,40 +97,48 @@ export default {
 
       const history = [...this.validMessages]
 
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 10000);
+
       try {
-        const res = await fetch('http://localhost:8000/chat/', {
+        const res = await fetch(`${this.apiBaseUrl}/chat/`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ history })
-        })
+          body: JSON.stringify({ history }),
+          signal: controller.signal
+        });
+        clearTimeout(timeoutId);
 
-        const data = await res.json()
-        console.log("Réponse backend:", data)
+        if (!res.ok) {
+          throw new Error(`HTTP error! status: ${res.status}`);
+        }
+
+        const data = await res.json();
 
         if (data && data.content && data.sender) {
           this.messageList.push({
             type: 'text',
             author: data.sender,
             data: { text: data.content }
-          })
+          });
 
           this.validMessages.push({
             sender: 'agent',
             content: data.content
-          })
+          });
         } else {
-          this.messageList.push({
-            type: 'text',
-            author: 'agent',
-            data: { text: 'Erreur inconnue' }
-          })
+          throw new Error('Invalid response format');
         }
       } catch (err) {
+        clearTimeout(timeoutId);
+        const errorMessage = err.name === 'AbortError'
+          ? 'La requête a expiré. Veuillez réessayer.'
+          : err.message || 'Une erreur est survenue lors de la communication avec le serveur.';
         this.messageList.push({
           type: 'text',
           author: 'agent',
-          data: { text: 'Erreur serveur' }
-        })
+          data: { text: `Erreur: ${errorMessage}` }
+        });
       }
     },
     closeChat() {

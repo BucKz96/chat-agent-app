@@ -2,8 +2,9 @@
 Pydantic models for message structure and chat request validation.
 """
 
-from pydantic import BaseModel, Field, constr
-from typing import Literal
+from typing import Annotated, Literal
+
+from pydantic import BaseModel, Field, StringConstraints
 
 
 class Message(BaseModel):
@@ -12,7 +13,9 @@ class Message(BaseModel):
     """
 
     sender: Literal["user", "agent"]
-    content: constr(strip_whitespace=True, min_length=1) = Field(..., description="Content must not be empty")
+    content: Annotated[str, StringConstraints(strip_whitespace=True, min_length=1)] = Field(
+        ..., description="Content must not be empty"
+    )
 
 
 class ChatRequest(BaseModel):
